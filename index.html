@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+        <style>
+    html, body, #editor {
+  margin: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+textarea, #editor .note-content {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+textarea {
+  border: none;
+  border-right: 1px solid #ccc;
+  resize: none;
+  outline: none;
+  background-color: #f6f6f6;
+  font-size: 18px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
+}
+
+code {
+  color: #f66;
+}
+/*目录*/
+.toc ul{
+  list-style:none;
+}
+.toc ul .toc-level-2{
+  padding-left:10px;
+}
+.toc ul .toc-level-3{
+  padding-left:30px;
+}
+.toc ul .toc-level-4{
+  padding-left:50px;
+}
+.toc ul .toc-level-5{
+  padding-left:70px;
+}
+.toc ul .toc-level-6{
+  padding-left:90px;
+}
+</style>
+<link href="https://dn-maxiang.qbox.me/res-min/themes/marxico.css" rel="stylesheet" />
+    </head>
+    <body>
+        
+<div id="editor">
+  <textarea :value="input" @input="update"></textarea>
+  <div v-html="compiledMarkdown"  class="note-content"></div>
+</div>
+<script src="http://cdn.bootcss.com/vue/2.2.6/vue.min.js"></script>
+<script src="http://cdn.bootcss.com/lodash.js/4.17.4/lodash.min.js"></script>
+<script src="marked.min.js"></script>
+<script>
+new Vue({
+  el: '#editor',
+  data: {
+    input: '[TOC]\n\
+# h1 \n\
+## h2 \n\
+### h3'
+  },
+  computed: {
+    compiledMarkdown: function () {
+      return marked(this.input, { sanitize: true })
+    }
+  },
+  methods: {
+    update: _.debounce(function (e) {
+      this.input = e.target.value
+    }, 300)
+  }
+})
+</script>
+
+    </body>
+</html>
